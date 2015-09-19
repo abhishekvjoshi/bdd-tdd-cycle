@@ -12,22 +12,29 @@ class MoviesController < ApplicationController
   end
 
   def index
-	#@movies = Movie.all
-	if params[:sortby] == "title"
+	@all_ratings = {'G'=>true,'PG'=>true,'PG-13'=>true,'R'=>true}
+	
+	@sort = params[:sortby]
+	if params.has_key?(:commit)
+		ratings = params["ratings"]
+		ratings = ratings.keys
+		@all_ratings.keys.each do |rating|
+			if params["ratings"][rating] == "1"
+				@all_ratings[rating] = true
+			else
+				@all_ratings[rating] = false
+			end
+		end
+		
+		@movies = Movie.where(:rating => ratings )
+	
+	elsif params[:sortby] == "title"
 		@movies = Movie.all.sort_by { |r| r.title }
 	elsif params[:sortby] == "releasedate"
 		@movies = Movie.all.sort_by { |r| r.release_date }
 	else
 		@movies = Movie.all
 	end
-	#@movies = Movie.order(:title, :release_date)
-	#@movies = Movie.all.sort_by { |r| r.title }
-    #@movies = Movie.order(sort_column)
-  end
-  
-  def title
-	#@movies = Movie.all
-    @movies = Movie.all.sort_by { |r| r.title }
   end
 
   def new
@@ -58,11 +65,4 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
   
-  def sort_column
-	Movie.column_names.include?(params[:sort]) ? params[:sort] : "title"
-  end
-  
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
 end
