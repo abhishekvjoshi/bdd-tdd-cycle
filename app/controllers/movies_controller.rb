@@ -14,26 +14,60 @@ class MoviesController < ApplicationController
   def index
 	@all_ratings = {'G'=>true,'PG'=>true,'PG-13'=>true,'R'=>true}
 	
-	@sort = params[:sortby]
-	if params.has_key?(:commit)
-		ratings = params["ratings"]
-		ratings = ratings.keys
-		@all_ratings.keys.each do |rating|
-			if params["ratings"][rating] == "1"
-				@all_ratings[rating] = true
-			else
-				@all_ratings[rating] = false
+	#@sortby = params[:sortby]
+	@sortby = session[:s_sortby]
+	if params.has_key?(:sortby)
+		if session[:s_sortby] != params[:sortby]
+			session[:s_sortby] = params[:sortby]
+			@sortby = params[:sortby]
+		end
+	end
+	if params.has_key?("ratings")
+		if session[:sratings].keys != params["ratings"]
+			if params["ratings"].keys.size > 0
+				ratings = params["ratings"]
+				ratings = ratings.keys
+				@all_ratings.keys.each do |rating|
+					if params["ratings"][rating] == "1"
+						@all_ratings[rating] = true
+					else
+						@all_ratings[rating] = false
+					end
+				end
+				session[:sratings]=@all_ratings
 			end
 		end
-		
-		@movies = Movie.where(:rating => ratings )
+	end
 	
-	elsif params[:sortby] == "title"
-		@movies = Movie.all.sort_by { |r| r.title }
-	elsif params[:sortby] == "releasedate"
-		@movies = Movie.all.sort_by { |r| r.release_date }
+	if session[:s_sortby] == "title"
+		ratings = []
+		session[:sratings].keys.each do |k|
+			if session[:sratings][k] == true
+				ratings.insert(0, k)
+			end
+		end
+		@movies = Movie.where(:rating => ratings ).sort_by { |r| r.title }
+		@all_ratings = session[:sratings]
+		
+	elsif session[:s_sortby] == "releasedate"
+		ratings = []
+		session[:sratings].keys.each do |k|
+			if session[:sratings][k] == true
+				ratings.insert(0, k)
+			end
+		end
+		@movies = Movie.where(:rating => ratings ).sort_by { |r| r.release_date }
+		@all_ratings = session[:sratings]
+		
 	else
-		@movies = Movie.all
+		ratings = []
+		@all_ratings.keys.each do |k|
+			if @all_ratings[k] == true
+				ratings.insert(0, k)
+			end
+		end
+		session[:sratings] = @all_ratings
+		@movies = Movie.where(:rating => ratings )
 	end
   end
 
