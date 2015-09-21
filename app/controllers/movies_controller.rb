@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
   def index
 	@all_ratings = {'G'=>true,'PG'=>true,'PG-13'=>true,'R'=>true}
 	
-	#@sortby = params[:sortby]
+	
 	@sortby = session[:s_sortby]
 	if params.has_key?(:sortby)
 		if session[:s_sortby] != params[:sortby]
