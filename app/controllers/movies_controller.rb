@@ -15,11 +15,11 @@ class MoviesController < ApplicationController
 	@all_ratings = {'G'=>true,'PG'=>true,'PG-13'=>true,'R'=>true}
 	
 	
-	@sortby = session[:s_sortby]
+	@sort_by = session[:s_sortby]
 	if params.has_key?(:sortby)
 		if session[:s_sortby] != params[:sortby]
 			session[:s_sortby] = params[:sortby]
-			@sortby = params[:sortby]
+			@sort_by = params[:sortby]
 		end
 	end
 	if params.has_key?("ratings")
