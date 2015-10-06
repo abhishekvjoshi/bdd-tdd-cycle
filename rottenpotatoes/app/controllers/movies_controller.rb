@@ -5,6 +5,18 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
+  
+  def matchingDirectors
+	id = params[:id]
+	@movie = Movie.find(id)
+	@director = @movie["director"]
+	if @director.nil? || @director.empty?
+		redirect_to url_for(:controller => "movies", :action => "index", :movie => @movie[:title])
+	else
+		@movies= Movie.where(:director => @director )
+	end
+	
+  end
 
   def index
     sort = params[:sort] || session[:sort]
@@ -34,6 +46,12 @@ class MoviesController < ApplicationController
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
     @movies = Movie.find_all_by_rating(@selected_ratings.keys, ordering)
+	
+	if :movie != ""
+		@movieWithoutDir = params[:movie]
+	else
+		@movieWithoutDir = nil
+	end
   end
 
   def new
