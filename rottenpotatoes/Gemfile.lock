@@ -175,7 +175,7 @@ DEPENDENCIES
   launchy
   pg
   rails (= 3.2.18)
-  rspec-rails
+  rspec-rails (= 2.14.2)
   sass-rails
   simplecov
   sqlite3

@@ -15,7 +15,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'launchy'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '2.14.2'
   gem 'simplecov'
 end
 group :production do

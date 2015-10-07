@@ -1,0 +1,18 @@
+describe MoviesController do
+  describe "adding a director" do
+	it 'should add a director for a movie' do
+		post: add_director, {:movie => 'Star Wars', :directorName => 'George Lucas'}
+		Movie.should_receive(:find_by_director).with('Star Wars')
+	end   
+  end
+
+end
+
+def add_director
+	Movie.all.each do |m|
+		if m[:title] == params[:movie]
+			m[:director] = params[:directorName]
+		end
+	end
+	
+end
