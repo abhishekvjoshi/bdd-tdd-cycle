@@ -13,7 +13,7 @@ class MoviesController < ApplicationController
 	if @director.nil? || @director.empty?
 		redirect_to url_for(:controller => "movies", :action => "index", :movie => @movie[:title])
 	else
-		@movies= Movie.where(:director => @director )
+		@movies= Movie.where(:director => @director)
 	end
 	
   end
