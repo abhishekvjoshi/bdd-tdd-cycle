@@ -6,7 +6,6 @@ describe MoviesController do
 		params = {:movie => 'Star Wars', :directorName => 'George Lucas'}
 		Movie.should_receive(:find_by_director).with(params). and_return(fake_results)
 		post :add_director, {:movie => 'Star Wars', :directorName => 'George Lucas'}
-		#expect(logger).to receive(params).with('Star Wars')
 	end   
   end
 
